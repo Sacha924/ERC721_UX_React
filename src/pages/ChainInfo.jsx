@@ -6,12 +6,14 @@ import Layout from "./Layout";
 
 const ChainInfo = () => {
   console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [defaultAccount, setDefaultAccount] = useState(null);
-  const [userBalance, setUserBalance] = useState(null);
-  const [connButtonText, setConnButtonText] = useState("Connect Wallet");
-  const [chainId, setChainId] = useState(null);
-  const [blockNumber, setBlockNumber] = useState(null);
+  const [allInfo, setAllInfo] = useState({
+    errorMessage: null,
+    defaultAccount: null,
+    userBalance: null,
+    connButtonText: "Connect Wallet",
+    chainId: null,
+    blockNumber: null,
+  });
 
   //Note from https://docs.metamask.io/guide/ethereum-provider.html#table-of-contents :
   // For any non-trivial Ethereum web application — a.k.a. dapp, web3 site etc. — to work, you will have to:
@@ -33,32 +35,45 @@ const ChainInfo = () => {
         .request({ method: "eth_requestAccounts" })
         .then((result) => {
           accountChangedHandler(result[0]);
-          setConnButtonText("Wallet Connected");
           getChainIdAndBlockNumber();
         })
         .catch((error) => {
           // If the request fails for any reason, the Promise will reject with an Ethereum RPC Error.
-          setErrorMessage(error.message);
+          setAllInfo({
+            errorMessage: error.message,
+            ...allInfo,
+          });
         });
     } else {
-      setErrorMessage("Please install MetaMask browser extension to interact");
+      setAllInfo({
+        errorMessage: "Please install MetaMask browser extension to interact",
+        ...allInfo,
+      });
     }
   };
 
   // update account, will cause component re-render ||| This method will setup our Account (address), and our balance
   const accountChangedHandler = (newAccount) => {
-    setDefaultAccount(newAccount);
     window.ethereum
       .request({ method: "eth_getBalance", params: [newAccount.toString(), "latest"] })
       .then((balance) => {
-        setUserBalance(ethers.utils.formatEther(balance));
+        setAllInfo({
+          ...allInfo,
+          defaultAccount: newAccount,
+          userBalance: ethers.utils.formatEther(balance),
+          connButtonText: "Wallet Connected",
+          ...allInfo,
+        });
       })
       .catch((error) => {
-        setErrorMessage(error.message);
+        setAllInfo({
+          errorMessage: error.message,
+          ...allInfo,
+        });
       });
   };
 
-  async function getChainIdAndBlockNumber() {
+  const getChainIdAndBlockNumber = async () => {
     // Get the provider from the global window object
     const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -67,9 +82,12 @@ const ChainInfo = () => {
     const number = await provider.getBlockNumber();
 
     // Update the state with the values
-    setChainId(id);
-    setBlockNumber(number);
-  }
+    setAllInfo({
+      ...allInfo,
+      chainId: id,
+      blockNumber: number,
+    });
+  };
 
   // listen for account changes (not necessary bc we listen the 1st time we connect)
   // window.ethereum.on("accountsChanged", accountChangedHandler);
@@ -79,27 +97,27 @@ const ChainInfo = () => {
       <Layout></Layout>
       <div className="ChainInfo">
         <h4> {"Connection to MetaMask using window.ethereum methods"} </h4>
-        <button onClick={connectWalletHandler}>{connButtonText}</button>
-        {chainId == 11155111 && (
+        <button onClick={connectWalletHandler}>{allInfo.connButtonText}</button>
+        {allInfo.chainId == 11155111 && (
           <div>
             <div className="accountDisplay">
-              <h3>Address: {defaultAccount}</h3>
+              <h3>Address: {allInfo.defaultAccount}</h3>
             </div>
             <div className="balanceDisplay">
-              <h3>Balance: {userBalance}</h3>
+              <h3>Balance: {allInfo.userBalance}</h3>
             </div>
             <div className="chainIdDisplay">
-              <h3>ChainId: {chainId}</h3>
+              <h3>ChainId: {allInfo.chainId}</h3>
             </div>
             <div className="blockNumberDisplay">
-              <h3>BlockNumber: {blockNumber}</h3>
+              <h3>BlockNumber: {allInfo.blockNumber}</h3>
             </div>
           </div>
         )}
 
-        {errorMessage}
+        {allInfo.errorMessage}
       </div>
-      {chainId != 11155111 && chainId != null && window.open("./NotFound", "_self")}
+      {allInfo.chainId != 11155111 && allInfo.chainId != null && window.open("./NotFound", "_self")}
     </>
   );
 };
