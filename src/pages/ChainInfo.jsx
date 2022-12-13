@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import Layout from "./Layout";
 
 // QUAND UN state est modif chainInfo est relancé
-
+//JE REPREND MON CODE QUI FONCTIONNE MAIS CELUI CI EST A OPTIMISE, LE FONCTIONNEMENT DE ASYNC et des USESTATE sont MAL ABORDEs
 const ChainInfo = () => {
   console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
   const [allInfo, setAllInfo] = useState({
@@ -23,27 +23,35 @@ const ChainInfo = () => {
   // Get the user's Ethereum account(s)
 
   //This function will be called when the user click on the button to connect his wallet. When he's clicking on the button, we want to show  the ChainId, the last block number, and user address on /chain-info + [feature] his balance
-  const connectWalletHandler = () => {
+  const connectWalletHandler = async () => {
     //Does the user have metamask ?
     if (window.ethereum && window.ethereum.isMetaMask) {
       console.log("MetaMask Here!");
 
-      // Use request to submit RPC requests to Ethereum via MetaMask. It returns a Promise that resolves to the result of the RPC method call.
-      //  This method allows the user to authorize Ethereum to provide the account information (the account address, the address and the publicKey
-      //  of the account's current Ethereum provider, and the chain ID of the Ethereum chain the account is connected to) to the dapp.
-      window.ethereum
-        .request({ method: "eth_requestAccounts" })
-        .then((result) => {
-          accountChangedHandler(result[0]);
-          getChainIdAndBlockNumber();
+      const result = await window.ethereum.request({ method: "eth_requestAccounts" }).catch((e) =>
+        setAllInfo({
+          errorMessage: e.message,
+          ...allInfo,
         })
-        .catch((error) => {
-          // If the request fails for any reason, the Promise will reject with an Ethereum RPC Error.
-          setAllInfo({
-            errorMessage: error.message,
-            ...allInfo,
-          });
-        });
+      );
+
+      const balance = await window.ethereum.request({ method: "eth_getBalance", params: [result[0].toString(), "latest"] }).catch((e) =>
+        setAllInfo({
+          errorMessage: e.message,
+          ...allInfo,
+        })
+      );
+
+      const [id, number] = await getChainIdAndBlockNumber();
+
+      setAllInfo({
+        errorMessage: null,
+        defaultAccount: result[0],
+        userBalance: balance,
+        connButtonText: "Wallet Connected",
+        chainId: id,
+        blockNumber: number,
+      });
     } else {
       setAllInfo({
         errorMessage: "Please install MetaMask browser extension to interact",
@@ -53,27 +61,8 @@ const ChainInfo = () => {
   };
 
   // update account, will cause component re-render ||| This method will setup our Account (address), and our balance
-  const accountChangedHandler = (newAccount) => {
-    window.ethereum
-      .request({ method: "eth_getBalance", params: [newAccount.toString(), "latest"] })
-      .then((balance) => {
-        setAllInfo({
-          ...allInfo,
-          defaultAccount: newAccount,
-          userBalance: ethers.utils.formatEther(balance),
-          connButtonText: "Wallet Connected",
-          ...allInfo,
-        });
-      })
-      .catch((error) => {
-        setAllInfo({
-          errorMessage: error.message,
-          ...allInfo,
-        });
-      });
-  };
 
-  const getChainIdAndBlockNumber = async () => {
+  async function getChainIdAndBlockNumber() {
     // Get the provider from the global window object
     const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -82,12 +71,8 @@ const ChainInfo = () => {
     const number = await provider.getBlockNumber();
 
     // Update the state with the values
-    setAllInfo({
-      ...allInfo,
-      chainId: id,
-      blockNumber: number,
-    });
-  };
+    return [id, number];
+  }
 
   // listen for account changes (not necessary bc we listen the 1st time we connect)
   // window.ethereum.on("accountsChanged", accountChangedHandler);
