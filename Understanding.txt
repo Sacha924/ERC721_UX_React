@@ -1,0 +1,21 @@
+I start by doing npx create-react-app erc721-front
+Then I do npm i -D react-router-dom, clean all the stuff that I don't need, and run npm start.
+
+Structure :
+index.html --> our web page
+
+folder pages --> contain all the different page of the project
+
+Bien comprendre l'utilisation de app vs index https://stackoverflow.com/questions/50493069/why-does-create-react-app-creates-both-app-js-and-index-js
+
+App will be our rooter file
+
+
+
+
+1 - Connect your app to the Sepolia network through Metamask and display the ChainId, the last block number, and user address on /chain-info
+
+
+
+
+
