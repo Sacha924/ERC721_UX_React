@@ -44,11 +44,35 @@ nav ul li {
 }
 /* ------------------------------------------------ BAYCinfo ------------------------------------------------  */
 
-#errorBAYC{
+#errorBAYC {
   color: red;
   font-size: 80px;
-  font-weight:900;
+  font-weight: 900;
   text-align: center;
   width: 60%;
   margin-left: 20%;
+}
+
+/* ------------------------------------------------ fakeNeftInfo ------------------------------------------------  */
+.fakeNeftElem {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 100px;
+}
+.fakeNeftElem ul {
+  width: 80%;
+  display: inline-block;
+  position: relative;
+  font-size: 30px;
+  margin-bottom: 0px;
+}
+.fakeNeftElem li {
+  margin-bottom: 80px;
+}
+.fakeNeftImage {
+  width: 20%;
+  height: 20%;
+  position: relative;
+  right: 5%;
 }
