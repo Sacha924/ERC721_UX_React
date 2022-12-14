@@ -18,14 +18,14 @@ export default function FakeBaycTokenInfo() {
   const contractAdress = "0x1dA89342716B14602664626CD3482b47D5C2005E";
   const abi = require("../contractABI/ABIFakeBAYC.json").abi;
 
-  let web3 = new Web3(window.ethereum);
+  const web3 = new Web3(window.ethereum);
   const contractInstance = new web3.eth.Contract(abi, contractAdress);
 
   const getTokenInfo = async (_tokenId) => {
     const _tokenURI = await contractInstance.methods
       .tokenURI(_tokenId)
       .call()
-      .catch((e) =>
+      .catch(() =>
         setTokenInfo({
           ...tokenInfo,
           errorMessage: "There is a problem, the token ID didn't exist",

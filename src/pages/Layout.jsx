@@ -14,7 +14,7 @@ const Layout = () => {
             <Link to="/FakeBayc">FakeBayc</Link>
           </li>
           <li>
-            <Link to="/FakeBaycTokenInfo">fakeBaycTokenInfo</Link>
+            <Link to="/FakeBaycTokenInfo">fake Bayc Token Info</Link>
           </li>
           <li>
             <Link to="/FakeNefturians">Fake Nefturians</Link>
