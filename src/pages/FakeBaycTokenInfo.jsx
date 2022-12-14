@@ -8,6 +8,7 @@ export default function FakeBaycTokenInfo() {
     tokenID: 84,
     metadatas: null,
     tokenImage: null,
+    errorMessage: null,
   });
 
   useEffect(() => {
@@ -21,12 +22,21 @@ export default function FakeBaycTokenInfo() {
   const contractInstance = new web3.eth.Contract(abi, contractAdress);
 
   const getTokenInfo = async (_tokenId) => {
-    const _tokenURI = await contractInstance.methods.tokenURI(_tokenId).call();
+    const _tokenURI = await contractInstance.methods
+      .tokenURI(_tokenId)
+      .call()
+      .catch((e) =>
+        setTokenInfo({
+          ...tokenInfo,
+          errorMessage: "There is a problem, the token ID didn't exist",
+        })
+      );
     const jsonURI = await fetch(_tokenURI).then((res) => res.json());
     setTokenInfo({
       tokenID: _tokenId,
       metadatas: jsonURI.attributes,
       tokenImage: jsonURI.image,
+      errorMessage: null,
     });
   };
 
@@ -34,18 +44,23 @@ export default function FakeBaycTokenInfo() {
     <>
       <Layout></Layout>
       <input type="number" value={tokenInfo.tokenID} min={0} onChange={(e) => getTokenInfo(Number.parseInt(e.target.value))} />
-      <h3>Token ID : {tokenInfo.tokenID}</h3>
-      {tokenInfo.metadatas != null && (
-        <ul>
-          {tokenInfo.metadatas.map((item) => (
-            <li>
-              {item.trait_type} : {item.value}
-            </li>
-          ))}
-        </ul>
-      )}
+      {tokenInfo.errorMessage == null && (
+        <div>
+          <h3>Token ID : {tokenInfo.tokenID}</h3>
+          {tokenInfo.metadatas != null && (
+            <ul>
+              {tokenInfo.metadatas.map((item) => (
+                <li>
+                  {item.trait_type} : {item.value}
+                </li>
+              ))}
+            </ul>
+          )}
 
-      {tokenInfo.tokenImage != null && <IpfsImage hash={tokenInfo.tokenImage} />}
+          {tokenInfo.tokenImage != null && <IpfsImage hash={tokenInfo.tokenImage} />}
+        </div>
+      )}
+      <h1 id="errorBAYC">{tokenInfo.errorMessage}</h1>
     </>
   );
 }
