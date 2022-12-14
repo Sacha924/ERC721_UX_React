@@ -5,7 +5,6 @@ import Layout from "./Layout";
 // QUAND UN state est modif chainInfo est relancé
 //JE REPREND MON CODE QUI FONCTIONNE MAIS CELUI CI EST A OPTIMISE, LE FONCTIONNEMENT DE ASYNC et des USESTATE sont MAL ABORDEs
 const ChainInfo = () => {
-  console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
   const [allInfo, setAllInfo] = useState({
     errorMessage: null,
     defaultAccount: null,

@@ -19,3 +19,4 @@ App will be our rooter file
 
 
 
+ Pour utiliser la bibliothèque IPFSLib, vous devez installer le package npm ipfs-http-client avec la commande npm install ipfs-http-client. Une fois que le package est installé, vous pouvez importer IPFSLib dans votre projet avec la ligne import { IPFSLib } from 'ipfs-http-client'.

@@ -12,19 +12,21 @@ import WrongNetwork from "./pages/WrongNetwork";
 import "./style.css";
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />} />
-        <Route path="/ChainInfo" element={<ChainInfo />} />
-        <Route path="/FakeBayc" element={<FakeBayc />} />
-        <Route path="/FakeBaycTokenInfo" element={<FakeBaycTokenInfo />} />
-        <Route path="/FakeNefturians" element={<FakeNefturians />} />
-        <Route path="/FakeNefturiansUserInfo" element={<FakeNefturiansUserInfo />} />
-        <Route path="/FakeMeebits" element={<FakeMeebits />} />
-        <Route path="/WrongNetwork" element={<WrongNetwork />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />} />
+          <Route path="/ChainInfo" element={<ChainInfo />} />
+          <Route path="/FakeBayc" element={<FakeBayc />} />
+          <Route path="/FakeBaycTokenInfo" element={<FakeBaycTokenInfo />} />
+          <Route path="/FakeNefturians" element={<FakeNefturians />} />
+          <Route path="/FakeNefturiansUserInfo" element={<FakeNefturiansUserInfo />} />
+          <Route path="/FakeMeebits" element={<FakeMeebits />} />
+          <Route path="/WrongNetwork" element={<WrongNetwork />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
