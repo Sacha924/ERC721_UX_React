@@ -34,7 +34,7 @@ index.html --> our web page
 
 folder pages --> contain all the different page of the project
 
-app.js and index.js, laern the difference : https://stackoverflow.com/questions/50493069/why-does-create-react-app-creates-both-app-js-and-index-js
+app.js and index.js, learn the difference : https://stackoverflow.com/questions/50493069/why-does-create-react-app-creates-both-app-js-and-index-js
 
 Layout.jsx allows us to navigate between the different pages.
 
