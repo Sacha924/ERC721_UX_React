@@ -46,7 +46,7 @@ const ChainInfo = () => {
       setAllInfo({
         errorMessage: null,
         defaultAccount: result[0],
-        userBalance: balance,
+        userBalance: ethers.utils.formatEther(balance),
         connButtonText: "Wallet Connected",
         chainId: id,
         blockNumber: number,
