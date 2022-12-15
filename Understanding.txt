@@ -20,3 +20,6 @@ App will be our rooter file
 
 
  Pour utiliser la bibliothèque IPFSLib, vous devez installer le package npm ipfs-http-client avec la commande npm install ipfs-http-client. Une fois que le package est installé, vous pouvez importer IPFSLib dans votre projet avec la ligne import { IPFSLib } from 'ipfs-http-client'.
+
+
+Les méthodes send et call sont deux différentes façons d'interagir avec un contrat Ethereum. La méthode send permet à un utilisateur d'envoyer des ethers ou des jetons sur un contrat, puis l'exécution change les variables internes du contrat. La méthode call n'envoie pas de fonds et ne modifie pas les variables du contrat, elle est utilisée pour obtenir des informations à partir du contrat. Il faut donc utiliser la méthode send lorsque vous souhaitez modifier les variables du contrat, et la méthode call lorsque vous voulez seulement obtenir des informations à partir du contrat.

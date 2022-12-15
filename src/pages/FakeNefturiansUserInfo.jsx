@@ -10,7 +10,6 @@ export default function FakeNefturiansUserInfo() {
   const abi = require("../contractABI/ABIFakeNefturian.json").abi;
   const web3 = new Web3(window.ethereum);
   const contractInstance = new web3.eth.Contract(abi, contractAdress);
-
   useEffect(() => {
     getList();
   }, []);
